@@ -63,6 +63,8 @@
     $new_template = str_replace('{{description}}', $description, $new_template);
     $new_template = str_replace('{{date}}', $date, $new_template);
 
+    echo $new_template;
+
 
     /**
      * Пятый пункт домашнего задания
@@ -73,8 +75,8 @@
 
     $b = $a++;
 
-    echo "Переменная \$a = $a";
-    echo "Переменная \$b = $b";
+    // echo "Переменная \$a = $a </br>";
+    // echo "Переменная \$b = $b";
 
 
 
