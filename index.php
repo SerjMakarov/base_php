@@ -9,5 +9,6 @@
 </head>
 <body>
     <div class="menu"><?=$menu?></div>
+    <div class="content"><?=$content?></div>
 </body>
 </html>
