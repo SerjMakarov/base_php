@@ -129,13 +129,22 @@ function mathOperation($arg1 = 0, $arg2 = 0, $operation = null)
     }
 }
 
+function power($val, $pow)
+{
+    if($pow == 0){
+        return 1;
+    }
+    return $val * power($val, --$pow);
+}
+
+$pow = power(4, 4);
 $sum = getSum(10, 10);
 $min = getMin(10, 10);
 $mul = getMul(10, 10);
 $div = getDiv(30, 0);
 $resOperation = mathOperation(50, 2, '+');
 
-$arData = ["result" => $result, "res" => $res, "sum" => $sum, "min" => $min, "mul" => $mul, "div" => $div, "resOperation" => $resOperation];
+$arData = ["result" => $result, "res" => $res, "sum" => $sum, "min" => $min, "mul" => $mul, "div" => $div, "resOperation" => $resOperation, "pow" => $pow];
 
 $menu = renderTemplate('menu', $arData);
 $content = renderTemplate('content', $arData);
@@ -149,6 +158,7 @@ function renderTemplate($template, $arData)
     $mul = $arData["mul"];
     $div = $arData["div"];
     $resOperation = $arData["resOperation"];
+    $pow = $arData["pow"];
 
     ob_start();
     include $template.'.php';
