@@ -1,14 +1,51 @@
-<?include 'script.php'?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-</head>
-<body>
-    <div class="menu"><?=$menu?></div>
-    <div class="content"><?=$content?></div>
-</body>
-</html>
+<?php
+
+$num = 0;
+
+while($num <= 100){
+    $res = $num % 2;
+    if($res == 0){
+        $result .= ' '.$num;
+    }
+
+    $num++;
+}
+
+
+function getNumbers($number){
+    $zeroString = 'ноль';
+    $oddString = 'нечетное число';
+    $evenString = 'четное число';
+    do {
+        $res = 1;
+        $number++;
+    } while ($number);
+}
+
+
+
+$arData = ["result" => $result, "res" => $res, "sum" => $sum, "min" => $min, "mul" => $mul, "div" => $div, "resOperation" => $resOperation, "pow" => $pow];
+$menu = renderTemplate('menu', $arData);
+$content = renderTemplate('content', $arData);
+$arTemplate = ['menu' => $menu , 'content' => $content];
+
+
+function renderTemplate($template, $arData)
+{
+    $result = $arData["result"];
+    $res = $arData["res"];
+    $sum = $arData["sum"];
+    $min = $arData["min"];
+    $mul = $arData["mul"];
+    $div = $arData["div"];
+    $resOperation = $arData["resOperation"];
+    $pow = $arData["pow"];
+    $content = $arData['content'];
+    $menu = $arData['menu'];
+
+    ob_start();
+    include $template.'.php';
+    return ob_get_clean();
+}
+
+echo renderTemplate('template', $arTemplate);

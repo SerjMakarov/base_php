@@ -145,9 +145,10 @@ $div = getDiv(30, 0);
 $resOperation = mathOperation(50, 2, '+');
 
 $arData = ["result" => $result, "res" => $res, "sum" => $sum, "min" => $min, "mul" => $mul, "div" => $div, "resOperation" => $resOperation, "pow" => $pow];
-
 $menu = renderTemplate('menu', $arData);
 $content = renderTemplate('content', $arData);
+$arTemplate = ['menu' => $menu , 'content' => $content];
+
 
 function renderTemplate($template, $arData)
 {
@@ -159,10 +160,12 @@ function renderTemplate($template, $arData)
     $div = $arData["div"];
     $resOperation = $arData["resOperation"];
     $pow = $arData["pow"];
+    $content = $arData['content'];
+    $menu = $arData['menu'];
 
     ob_start();
     include $template.'.php';
-    $content = ob_get_contents();
-    ob_end_clean();
-    return $content;
+    return ob_get_clean();
 }
+
+echo renderTemplate('template', $arTemplate);
