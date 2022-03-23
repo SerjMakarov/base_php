@@ -4,6 +4,18 @@
     // var_dump($_SERVER);
     $uploadDir = './upload/';
     $existsDir = file_exists($uploadDir);
+    $message_error_upload = null;
+
+    if(@$_REQUEST['doDelete']){
+        $arFiles = scandir($uploadDir);
+        foreach($arFiles as $namePhoto){
+           $id = sscanf($namePhoto, '%d_');
+           if($id[0] == $_POST['id']){
+              $del = unlink($uploadDir.$namePhoto);
+           }
+        }
+        
+    }
 
     if(@$_REQUEST['doPush'])
     {
@@ -13,13 +25,18 @@
         }
 
         $tmpFile = $_FILES['files']['tmp_name'];
+        $id = filemtime($tmpFile);
         $nameFile = $_FILES['files']['name'];
         $checkFiles = is_uploaded_file($tmpFile);
 
         if($checkFiles)
         {
-            move_uploaded_file($tmpFile, $uploadDir.$nameFile);
-            // echo "Файл $nameFile успешно загружен";
+            $mime_type = mime_content_type($tmpFile);
+            if($mime_type === 'image/jpeg'){
+                move_uploaded_file($tmpFile, $uploadDir.$id.'_'.$nameFile);
+            } else {
+                $message_error_upload = 'Тип загружаемого файла неправельный, допустимы только jpeg файлы';
+            }
         }
     }
 
@@ -75,6 +92,12 @@
             border: solid 1px #000;
             margin: 10px;
         }
+
+        .request {
+            text-align: center;
+            margin: 20px 0 20px 0;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -82,9 +105,15 @@
         <?if($arPhotos){?>
             <div class="gallery">
                 <?foreach($arPhotos as $key => $photo){?>
-                    <a href="<?=$photo['url']?>" target="_blank">
-                        <img class="picture" src="<?=$photo['url']?>" alt="<?=$photo['name']?>" width="100" height="100">
-                    </a>
+                    <div class="pic">
+                        <a href="<?=$photo['url']?>" target="_blank">
+                            <img class="picture" src="<?=$photo['url']?>" alt="<?=$photo['name']?>" width="auto" height="100">
+                        </a>
+                        <form class="form" action="<?=$_SERVER['SCRIPT_NAME']?>" method="POST">
+                            <input type="submit" value="Удалить" name="doDelete">
+                            <input type="hidden" name="id" value="<?=$key?>">
+                        </form>
+                    </div>
                 <?}?>
             </div>
         <?}else{?>
@@ -96,6 +125,7 @@
             <input type="file" name="files">
             <input type="submit" value="Загрузить" name="doPush">
         </form>
+        <div class="request"><?=$message_error_upload?></div>
     </div>
 </body>
 </html>
