@@ -1,27 +1,40 @@
 <?php
-    // var_dump($_REQUEST);
-    // var_dump($_FILES);
-    // var_dump($_SERVER);
-    $uploadDir = './upload/';
-    $existsDir = file_exists($uploadDir);
-    $message_error_upload = null;
+    require 'entrypoint.php';
+    
+    $notPush = false;
+    $errorMsg = '';
 
-    if(@$_REQUEST['doDelete']){
-        $arFiles = scandir($uploadDir);
-        foreach($arFiles as $namePhoto){
-           $id = sscanf($namePhoto, '%d_');
-           if($id[0] == $_POST['id']){
-              $del = unlink($uploadDir.$namePhoto);
-           }
-        }
-        
+    if(@$_REQUEST['doDelete'])
+    {
+        doQueryDelete($_POST['id'], $db);
+        header("Location: http://cms.loc/");
+        exit();
     }
+
+    $arData =[];
+    $result = doQuerySelect($db);
+    while($row = mysqli_fetch_assoc($result))
+    {
+        $arData[] = $row;
+    }
+
+    $arPhotos = false;
+    $message_error_upload = null;
 
     if(@$_REQUEST['doPush'])
     {
+        $uploadDir = './upload/';
+        $existsDir = file_exists($uploadDir);
+
         if(!$existsDir)
         {
             mkdir($uploadDir, 0777);
+        }
+
+        if($_FILES['files']['tmp_name'] === '')
+        {
+            $notPush = true;
+            $errorMsg = 'Выберите файл';
         }
 
         $tmpFile = $_FILES['files']['tmp_name'];
@@ -32,37 +45,36 @@
         if($checkFiles)
         {
             $mime_type = mime_content_type($tmpFile);
-            if($mime_type === 'image/jpeg'){
+            if($mime_type === 'image/jpeg')
+            {
                 move_uploaded_file($tmpFile, $uploadDir.$id.'_'.$nameFile);
-            } else {
+                $arParams = getFileInfo($uploadDir);
+                doQueryInsert($arParams, $db);
+                header("Location: http://cms.loc/");
+                exit();
+            } 
+            else
+            {
                 $message_error_upload = 'Тип загружаемого файла неправельный, допустимы только jpeg файлы';
             }
         }
     }
 
-    $arPhotos = getArPhotos($uploadDir);
-
-    function getArPhotos($path)
+    function getFileInfo($path)
     {
-        $arPhotos = [];
         $arFiles = [];
         $arFiles = glob("$path*");
-        foreach($arFiles as $path)
+        foreach($arFiles as $value)
         {
-            $sz = getimagesize($path);
-            $tm = filemtime($path);
-            $arPhotos[$tm] = [
-                'time' => $tm,
-                'name' => basename($path),
-                'url' => $path,
-                'w'=> $sz[0],
-                'h'=> $sz[1],
-                'wh'=> $sz[3],
-            ];
+            $arParams = array
+            (
+                'size' => filesize($value),
+                'name' => basename($value),
+                'path' => $value, 
+            );
         }
-        return $arPhotos;
+        return $arParams;
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,16 +114,16 @@
 </head>
 <body>
     <div class="container">
-        <?if($arPhotos){?>
+        <?if($arData){?>
             <div class="gallery">
-                <?foreach($arPhotos as $key => $photo){?>
+                <?foreach($arData as $key => $photo){?>
                     <div class="pic">
-                        <a href="<?=$photo['url']?>" target="_blank">
+                        <a href="full_pic.php?url=<?=$photo['url']?>&id=<?=$photo['id']?>&name=<?=$photo['name']?>">
                             <img class="picture" src="<?=$photo['url']?>" alt="<?=$photo['name']?>" width="auto" height="100">
                         </a>
                         <form class="form" action="<?=$_SERVER['SCRIPT_NAME']?>" method="POST">
                             <input type="submit" value="Удалить" name="doDelete">
-                            <input type="hidden" name="id" value="<?=$key?>">
+                            <input type="hidden" name="id" value="<?=$photo['id']?>">
                         </form>
                     </div>
                 <?}?>
@@ -125,7 +137,7 @@
             <input type="file" name="files">
             <input type="submit" value="Загрузить" name="doPush">
         </form>
-        <div class="request"><?=$message_error_upload?></div>
+        <div class="request"><?=$notPush ? $errorMsg : $message_error_upload?></div>
     </div>
 </body>
 </html>
