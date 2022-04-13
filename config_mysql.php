@@ -12,7 +12,7 @@ function doQueryInsert($arParams, $db)
     // $sql = "INSERT INTO `small_img`(`id` ,`url`, `size`, `name`) VALUES (null , '$path', $size, '$name')";
     // $result = mysqli_query($db, $sql);
 
-    [
+    @[
         'size' => $size, 
         'name' => $name, 
         'path' => $path, 
@@ -20,7 +20,8 @@ function doQueryInsert($arParams, $db)
         'product_desc' => $product_desc, 
         'product_price' => $product_price, 
         'product_currencies' => $product_currencies,
-        'id_img' => $id_img
+        'id_img' => $id_img,
+        'id' => $id,
     ] = $arParams;
     
     if(!empty($size) && !empty($name) && !empty($path)){
@@ -42,6 +43,11 @@ function doQueryInsert($arParams, $db)
             $result = mysqli_query($db, $sql);
         }
     }
+
+    if(!empty($id)){
+        $sql = "INSERT INTO `basket`(`id_item`, `id` ) VALUES (null , $id)";
+        $result = mysqli_query($db, $sql);
+    }
 }
 
 function doQuerySelect($db)
@@ -51,8 +57,15 @@ function doQuerySelect($db)
     return $result; 
 }
 
+function doQuerySelectBasket($db)
+{
+    $sql = "SELECT * FROM basket INNER JOIN goods ON goods.id_img = basket.id JOIN small_img ON basket.id = small_img.id_img"; 
+    $result = mysqli_query($db, $sql);
+    return $result; 
+}
+
 function doQueryDelete($id, $db)
 {
-    $sql = "DELETE FROM `small_img` WHERE `id` = $id";
+    $sql = "DELETE FROM `basket` WHERE `id` = $id";
     $result = mysqli_query($db, $sql);
 }

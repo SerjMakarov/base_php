@@ -4,14 +4,6 @@ require 'config_mysql.php';
 $notPush = false;
 $errorMsg = '';
 
-if(@$_REQUEST['doDelete'])
-{
-    doQueryDelete($_POST['id'], $db);
-    header("Location: /");
-    exit();
-}
-
-
 $arData =[];
 $result = doQuerySelect($db);
 
@@ -90,6 +82,10 @@ function getFileInfo($path)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог</title>
     <style>
+        body {
+            font-family: sans-serif;
+            font-size: 13px; 
+        }
         .container {
             width: 1170px;
             margin: 0 auto;
@@ -154,10 +150,22 @@ function getFileInfo($path)
         .catalog__desc {
             font-size: 14px;
         }
+        .btn_basket {
+            background: #807777;
+        }
+        .btn_basket {
+            padding: 20px 30px;
+            display: inline-block;
+            background: #807777;
+            text-decoration: none;
+            color: #000;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <a class="btn_basket" href="basket.php">Корзина</a>
         <?php if($arData):?>
             <div class="catalog">
                 <?php foreach($arData as $key => $photo):?>

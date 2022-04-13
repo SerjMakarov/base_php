@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Апр 11 2022 г., 01:56
+-- Время создания: Апр 14 2022 г., 01:43
 -- Версия сервера: 8.0.28-0ubuntu0.20.04.3
 -- Версия PHP: 7.4.3
 
@@ -21,6 +21,17 @@ SET time_zone = "+00:00";
 --
 -- База данных: `gallery`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `basket`
+--
+
+CREATE TABLE `basket` (
+  `id_item` int NOT NULL,
+  `id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -79,6 +90,12 @@ INSERT INTO `small_img` (`id_img`, `url`, `size`, `name`) VALUES
 --
 
 --
+-- Индексы таблицы `basket`
+--
+ALTER TABLE `basket`
+  ADD PRIMARY KEY (`id_item`);
+
+--
 -- Индексы таблицы `goods`
 --
 ALTER TABLE `goods`
@@ -93,6 +110,12 @@ ALTER TABLE `small_img`
 --
 -- AUTO_INCREMENT для сохранённых таблиц
 --
+
+--
+-- AUTO_INCREMENT для таблицы `basket`
+--
+ALTER TABLE `basket`
+  MODIFY `id_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT для таблицы `goods`
