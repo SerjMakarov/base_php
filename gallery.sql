@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Апр 22 2022 г., 04:15
+-- Время создания: Апр 22 2022 г., 16:21
 -- Версия сервера: 8.0.28-0ubuntu0.20.04.3
--- Версия PHP: 7.4.3
+-- Версия PHP: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,9 +39,12 @@ CREATE TABLE `basket` (
 --
 
 INSERT INTO `basket` (`id_item`, `basket_id`, `id`) VALUES
-(96, 'id6261f8b04e1f68.33927500', 52),
-(97, 'id6261f8b04e1f68.33927500', 49),
-(98, 'id6261f8b04e1f68.33927500', 51);
+(105, 'id6262a19693bc46.03203549', 52),
+(106, 'id6262a19693bc46.03203549', 51),
+(107, 'id6262a19693bc46.03203549', 47),
+(108, 'id6262a1daa16086.63329023', 51),
+(109, 'id6262aaf1da80d9.51139059', 53),
+(110, 'id6262aaf1da80d9.51139059', 52);
 
 -- --------------------------------------------------------
 
@@ -92,7 +95,9 @@ CREATE TABLE `order` (
 --
 
 INSERT INTO `order` (`order_id`, `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone`, `orderid`) VALUES
-(5, 'Санкт-Петербург', 'Энергетиков', '24', 'Иванов', 'Иван', '8(953) 189-88-99', 'id6261f8b04e1f68.33927500');
+(8, 'Вологда', 'Строителей', '45', 'Львов', 'Сергей', '8(953)455-78-88', 'id6262a19693bc46.03203549'),
+(9, 'Санкт-Петербург', 'Энергетиков', '888', 'Егоров', 'Вова', '8(953)455-78-77', 'id6262a1daa16086.63329023'),
+(10, 'Иваново', 'Иванова', '123', 'Иванов', 'Иван', '8(953)455-78-12', 'id6262aaf1da80d9.51139059');
 
 -- --------------------------------------------------------
 
@@ -181,7 +186,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT для таблицы `basket`
 --
 ALTER TABLE `basket`
-  MODIFY `id_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT для таблицы `goods`
@@ -193,7 +198,7 @@ ALTER TABLE `goods`
 -- AUTO_INCREMENT для таблицы `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `small_img`

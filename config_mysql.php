@@ -36,7 +36,7 @@ function doQueryInsert($arParams, $db)
     $result = mysqli_query($db, $sql);
 
     while($row = mysqli_fetch_assoc($result))
-    {Ё
+    {
         $arId = $row;
     }
 
