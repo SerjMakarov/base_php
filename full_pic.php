@@ -1,8 +1,8 @@
 <?php
+session_start();
 $id = intval($_GET['id_img']);
 $check = false;
 $dataRequst = (boolean) $id;
-
 
 if($dataRequst){
     require 'config_mysql.php';
@@ -32,13 +32,11 @@ if($dataRequst){
 }
 
 if(@$_POST['add_item'] === 'Y'){
-    $arParams = ['id' => $_POST['id_item']];
+    $arParams = ['id' => $_POST['id_item'], 'basket_id' => $_SESSION['userUnknownID']];
     doQueryInsert($arParams, $db);
     header("Location:".$_SERVER['REQUEST_URI']);
     $_POST['add_item'] = 'N';
 }
-
-
 ?>
 
 <!DOCTYPE html>

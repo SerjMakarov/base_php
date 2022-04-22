@@ -1,4 +1,29 @@
 <?php
+session_start();
+
+if(empty($_SESSION['userUnknownID']) && !isset($_SESSION['userUnknownID'])){
+    $_SESSION['userUnknownID']  = getUserUnknownID();
+    $_SESSION['userUnknownIDBasket'] = $_SESSION['userUnknownID'];
+}
+
+if(empty($_SESSION['isAuth']) && !isset($_SESSION['isAuth']))
+{
+    $_SESSION['isAuth'] = false;
+}
+
+if(@$_REQUEST['nextPurchase'])
+{
+    unset($_SESSION['purchase']);
+    unset($_SESSION['userUnknownIDBasket']);
+    unset($_SESSION['userUnknownID']);
+}
+
+if(@$_GET['exit'] == 1)
+{
+    $_SESSION['isAuth'] = false;
+    session_unset();
+}
+
 require 'config_mysql.php';
 
 $notPush = false;
@@ -73,6 +98,12 @@ function getFileInfo($path)
     }
     return $arParams;
 }
+
+function getUserUnknownID(){
+    $userUnknownID = uniqid('id', true);
+    return $userUnknownID;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,6 +197,12 @@ function getFileInfo($path)
 <body>
     <div class="container">
         <a class="btn_basket" href="basket.php">Корзина</a>
+        <?php if(@!$_SESSION['isAuth']):?>
+            <a class="btn_basket" href="auth.php">Авторизоваться</a>
+        <?php else:?>
+            <a class="btn_basket" href="auth.php">В личный кабинет</a>
+            <a class="btn_basket" href="<?=$_SERVER['SCRIPT_NAME'].'?exit='.$_SESSION['isAuth']?>">Выйти</a>
+        <?php endif;?>
         <?php if($arData):?>
             <div class="catalog">
                 <?php foreach($arData as $key => $photo):?>
@@ -184,7 +221,8 @@ function getFileInfo($path)
             <div class="gallery">
                 <p>Загрузите фото и описание товара</p>
             </div>
-        <?php endif;?>    
+        <?php endif;?>
+        <?php if(@$_SESSION['isAuth']):?>    
         <form class="form" action="<?=$_SERVER['SCRIPT_NAME']?>" method="POST" enctype="multipart/form-data">
             <fieldset class="form__data">
                 <legend>Информация о товаре</legend>
@@ -198,6 +236,7 @@ function getFileInfo($path)
                 <input type="submit" value="Загрузить" name="doPush">
             </fieldset>
         </form>
+        <?php endif;?>
         <div class="request"><?= $notPush ? $errorMsg : $message_error_upload?></div>
     </div>
 </body>

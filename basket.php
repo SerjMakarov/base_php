@@ -1,5 +1,7 @@
 <?php
+session_start();
 require 'config_mysql.php';
+$arList = [];
 
 if(@$_REQUEST['doDelete'])
 {
@@ -13,9 +15,13 @@ while($row = mysqli_fetch_assoc($result))
     $arData[] = $row;
 }
 
+
 foreach($arData as $key => $item)
 {
-    $arList[] = $item;
+    if(@$_SESSION['userUnknownIDBasket'] == $item['basket_id'])
+    {
+        $arList[] = $item;
+    }
 }
 ?>
 
@@ -67,7 +73,7 @@ foreach($arData as $key => $item)
 <body>
     <div class="container">
     <a class="btn_basket" href="index.php">Каталог</a>
-        <?php if($arData):?>
+        <?php if($arList):?>
             <div class="basket">
                 <?php foreach($arList as $item):?>
                     <div class="basket__list">
@@ -89,6 +95,7 @@ foreach($arData as $key => $item)
                 <div class="basket__order_info">
 
                 </div>
+                <a class="btn_basket" href="order.php?">Оформить заказ</a>
             </div>
         <?php else:?>
             <div class="basket__clear">

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Апр 14 2022 г., 01:43
+-- Время создания: Апр 22 2022 г., 16:21
 -- Версия сервера: 8.0.28-0ubuntu0.20.04.3
--- Версия PHP: 7.4.3
+-- Версия PHP: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -30,8 +30,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `basket` (
   `id_item` int NOT NULL,
+  `basket_id` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `basket`
+--
+
+INSERT INTO `basket` (`id_item`, `basket_id`, `id`) VALUES
+(105, 'id6262a19693bc46.03203549', 52),
+(106, 'id6262a19693bc46.03203549', 51),
+(107, 'id6262a19693bc46.03203549', 47),
+(108, 'id6262a1daa16086.63329023', 51),
+(109, 'id6262aaf1da80d9.51139059', 53),
+(110, 'id6262aaf1da80d9.51139059', 52);
 
 -- --------------------------------------------------------
 
@@ -63,6 +76,32 @@ INSERT INTO `goods` (`id`, `goods_name`, `description`, `price`, `currencies`, `
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `order`
+--
+
+CREATE TABLE `order` (
+  `order_id` int NOT NULL,
+  `order_city` varchar(1000) NOT NULL,
+  `order_street` varchar(1000) NOT NULL,
+  `order_home` varchar(1000) NOT NULL,
+  `order_surname` varchar(1000) NOT NULL,
+  `order_name` varchar(1000) NOT NULL,
+  `order_phone` varchar(1000) NOT NULL,
+  `orderid` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `order`
+--
+
+INSERT INTO `order` (`order_id`, `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone`, `orderid`) VALUES
+(8, 'Вологда', 'Строителей', '45', 'Львов', 'Сергей', '8(953)455-78-88', 'id6262a19693bc46.03203549'),
+(9, 'Санкт-Петербург', 'Энергетиков', '888', 'Егоров', 'Вова', '8(953)455-78-77', 'id6262a1daa16086.63329023'),
+(10, 'Иваново', 'Иванова', '123', 'Иванов', 'Иван', '8(953)455-78-12', 'id6262aaf1da80d9.51139059');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `small_img`
 --
 
@@ -85,6 +124,26 @@ INSERT INTO `small_img` (`id_img`, `url`, `size`, `name`) VALUES
 (52, './upload/1649627946_74877e99996311ec87ca2c4d5458e9b8_bf544c24a04111ec87d32c4d5458e9b8.jpg', 288317, '1649627946_74877e99996311ec87ca2c4d5458e9b8_bf544c24a04111ec87d32c4d5458e9b8.jpg'),
 (53, './upload/1649628233_74877e80996311ec87ca2c4d5458e9b8_907247c4a04211ec87d32c4d5458e9b8.jpg', 135425, '1649628233_74877e80996311ec87ca2c4d5458e9b8_907247c4a04211ec87d32c4d5458e9b8.jpg');
 
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user`
+--
+
+CREATE TABLE `user` (
+  `user_id` int NOT NULL,
+  `login` varchar(300) NOT NULL,
+  `pass` varchar(300) NOT NULL,
+  `user_auth_id` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `user`
+--
+
+INSERT INTO `user` (`user_id`, `login`, `pass`, `user_auth_id`) VALUES
+(2, 'test', '1234', 'id6261dccc39c827.35991980');
+
 --
 -- Индексы сохранённых таблиц
 --
@@ -102,10 +161,22 @@ ALTER TABLE `goods`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `order`
+--
+ALTER TABLE `order`
+  ADD PRIMARY KEY (`order_id`);
+
+--
 -- Индексы таблицы `small_img`
 --
 ALTER TABLE `small_img`
   ADD PRIMARY KEY (`id_img`);
+
+--
+-- Индексы таблицы `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -115,7 +186,7 @@ ALTER TABLE `small_img`
 -- AUTO_INCREMENT для таблицы `basket`
 --
 ALTER TABLE `basket`
-  MODIFY `id_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id_item` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT для таблицы `goods`
@@ -124,10 +195,22 @@ ALTER TABLE `goods`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
+-- AUTO_INCREMENT для таблицы `order`
+--
+ALTER TABLE `order`
+  MODIFY `order_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT для таблицы `small_img`
 --
 ALTER TABLE `small_img`
   MODIFY `id_img` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT для таблицы `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
