@@ -1,5 +1,5 @@
 <?php
-$db = @mysqli_connect("localhost", "test", "JF*OfD:%8CR;qY)Q", "gallery");
+$db = @mysqli_connect("localhost", "test", "xV}/e4NpF>^=", "gallery");
 
 if($db == false)
 {
@@ -36,7 +36,7 @@ function doQueryInsert($arParams, $db)
     $result = mysqli_query($db, $sql);
 
     while($row = mysqli_fetch_assoc($result))
-    {
+    {Ё
         $arId = $row;
     }
 
@@ -73,9 +73,9 @@ function doQuerySelectBasket($db)
     return $result; 
 }
 
-function doQuerySelectBasketInfo($db)
+function doQuerySelectBasketInfo($db, $id)
 {
-    $sql = "SELECT `goods_name`, `price`, `currencies` FROM basket INNER JOIN goods ON goods.id_img = basket.id JOIN small_img ON basket.id = small_img.id_img"; 
+    $sql = "SELECT `goods_name`, `price`, `currencies`, `basket_id` FROM basket INNER JOIN goods ON goods.id_img = basket.id WHERE basket_id = '$id'"; 
     $result = mysqli_query($db, $sql);
     return $result; 
 }
@@ -90,7 +90,7 @@ function doQuerySelectAuth($db)
 
 function doQuerySelectOrder($db)
 {
-    $sql = "SELECT `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone` FROM `order`"; 
+    $sql = "SELECT `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone`, `orderid` FROM `order`"; 
     $result = mysqli_query($db, $sql);
     return $result; 
 }

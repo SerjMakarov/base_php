@@ -10,16 +10,14 @@ while($row = mysqli_fetch_assoc($result))
     $arData[] = $row;
 }
 
-$result = doQuerySelectBasketInfo($db);
-while($row = mysqli_fetch_assoc($result))
+foreach($arData as $val)
 {
-    $arBasket[] = $row;
+    $result = doQuerySelectBasketInfo($db, $val['orderid']);
+    while($row = mysqli_fetch_assoc($result))
+    {
+        $arBasket[$val['orderid']][] = $row;
+    }
 }
-
-foreach($arBasket as $key => $val){
-    $arData[] = $val;
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +75,7 @@ foreach($arBasket as $key => $val){
     <div class="container">
         <h1>Заказы покупателей</h1>
         <a class="btn_basket" href="auth.php">В личный кабинет</a>
-        <?php foreach($arData as $key => $order):?>
+        <?php foreach($arData as $order):?>
             <div class="wrap">
                 <h4>Адрес</h4>
                 <div>Город: <span><?=$order['order_city']?></span></div>
@@ -88,8 +86,10 @@ foreach($arBasket as $key => $val){
                 <div>Имя: <span><?=$order['order_name']?></span></div>
                 <div>Телефон: <span><?=$order['order_phone']?></span></div>
                 <h4>Товары корзины</h4>
-                <div>Название: <span><?=$order['goods_name']?></span></div>
-                <div>Цена: <span><?=$order['price']?></span><span><?=$order['currencies']?></span></div>
+                <?php foreach($arBasket[$order['orderid']] as $goods):?>
+                <div>Название: <span><?=$goods['goods_name']?></span></div>
+                <div>Цена: <span><?=$goods['price']?></span><span><?=$goods['currencies']?></span></div>
+                <?php endforeach;?>
             </div>
         <?php endforeach;?>    
     </div>    
