@@ -8,11 +8,7 @@ if($db == false)
 
 function doQueryInsert($arParams, $db)
 {
-    // ['size' => $size, 'name' => $name, 'path' => $path] = $arParams;
-    // $sql = "INSERT INTO `small_img`(`id` ,`url`, `size`, `name`) VALUES (null , '$path', $size, '$name')";
-    // $result = mysqli_query($db, $sql);
-
-    [
+    @[
         'size' => $size, 
         'name' => $name, 
         'path' => $path, 
@@ -20,7 +16,15 @@ function doQueryInsert($arParams, $db)
         'product_desc' => $product_desc, 
         'product_price' => $product_price, 
         'product_currencies' => $product_currencies,
-        'id_img' => $id_img
+        'id_img' => $id_img,
+        'id' => $id,
+        'basket_id' => $basket_id,
+        'order_city' => $order_city,
+        'order_street' => $order_street,
+        'order_home' => $order_home,
+        'order_surname' => $order_surname,
+        'order_name' => $order_name,
+        'order_phone' => $order_phone,
     ] = $arParams;
     
     if(!empty($size) && !empty($name) && !empty($path)){
@@ -42,6 +46,17 @@ function doQueryInsert($arParams, $db)
             $result = mysqli_query($db, $sql);
         }
     }
+
+    if(!empty($id)){
+        $sql = "INSERT INTO `basket`(`id_item`, `basket_id`, `id` ) VALUES (null , '$basket_id', $id)";
+        $result = mysqli_query($db, $sql);
+    }
+
+    if(!empty($order_city) && !empty($order_street) && !empty($order_home) && !empty($order_surname) && !empty($order_name) && !empty($order_phone) && !empty($basket_id)){
+        $sql = "INSERT INTO `order`(`order_id`, `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone`, `orderid` ) VALUES (null , '$order_city', '$order_street', '$order_home', '$order_surname', '$order_name', '$order_phone', '$basket_id')";
+        $result = mysqli_query($db, $sql);
+        return $result;
+    }
 }
 
 function doQuerySelect($db)
@@ -51,8 +66,37 @@ function doQuerySelect($db)
     return $result; 
 }
 
+function doQuerySelectBasket($db)
+{
+    $sql = "SELECT * FROM basket INNER JOIN goods ON goods.id_img = basket.id JOIN small_img ON basket.id = small_img.id_img"; 
+    $result = mysqli_query($db, $sql);
+    return $result; 
+}
+
+function doQuerySelectBasketInfo($db)
+{
+    $sql = "SELECT `goods_name`, `price`, `currencies` FROM basket INNER JOIN goods ON goods.id_img = basket.id JOIN small_img ON basket.id = small_img.id_img"; 
+    $result = mysqli_query($db, $sql);
+    return $result; 
+}
+
+
+function doQuerySelectAuth($db)
+{
+    $sql = "SELECT `login`, `pass`, `user_auth_id` FROM user"; 
+    $result = mysqli_query($db, $sql);
+    return $result; 
+}
+
+function doQuerySelectOrder($db)
+{
+    $sql = "SELECT `order_city`, `order_street`, `order_home`, `order_surname`, `order_name`, `order_phone` FROM `order`"; 
+    $result = mysqli_query($db, $sql);
+    return $result; 
+}
+
 function doQueryDelete($id, $db)
 {
-    $sql = "DELETE FROM `small_img` WHERE `id` = $id";
+    $sql = "DELETE FROM `basket` WHERE `id` = $id";
     $result = mysqli_query($db, $sql);
 }
